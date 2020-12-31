@@ -1,0 +1,22 @@
+{
+  "compilerOptions": {
+    "target": "es5",
+    "module": "es2015",
+    "lib": ["dom", "es2017"],
+    "declaration": true,
+    "declarationDir": "./typings",
+    "sourceMap": true,
+    "removeComments": false,
+    "resolveJsonModule": true,
+    "preserveConstEnums": true,
+    "strict": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "moduleResolution": "node",
+    "baseUrl": "./",
+    "esModuleInterop": true,
+    "skipLibCheck": true
+  },
+  "include": ["./src/**/*", "./*.d.ts"],
+  "exclude": ["node_modules", "dist", "**/*.spec.ts"]
+}
