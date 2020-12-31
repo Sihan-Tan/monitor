@@ -1,55 +1,57 @@
 import { InitOptions } from './types/options';
 import PerformancePage from './PerformancePage';
 // import sw from './sw';
-import ErrorCatch from './ErrorCatch'
+import ErrorCatch from './ErrorCatch';
 import uuid from './utils/uuid';
 
 class Monitor {
     private options: InitOptions;
+
     private errInstance:any;
+
     constructor(options: InitOptions) {
-        this.options = {
-            debug: true,
-            isError: true,
-            isPage: true,
-            isResource: true,
-            probability: 5,
-            isCrash: true,
-            ...options
-        }
-        this.errInstance = {}
+      this.options = {
+        debug: true,
+        isError: true,
+        isPage: true,
+        isResource: true,
+        probability: 5,
+        isCrash: true,
+        ...options,
+      };
+      this.errInstance = {};
     }
 
     public run() {
-        const { isPage, isError, isCrash } = this.options;
-        isPage && new PerformancePage(this.options)
-        isError && (this.errInstance = new ErrorCatch(this.options))
-        isCrash && this.checkCrash()
+      const { isPage, isError, isCrash } = this.options;
+      isPage && new PerformancePage(this.options);
+      isError && (this.errInstance = new ErrorCatch(this.options));
+      isCrash && this.checkCrash();
     }
 
     public report(data:any) {
       console.log('report: ', data);
       this.errInstance.send({
         type: 'error',
-        data
-      })
+        data,
+      });
     }
 
     private checkCrash() {
-      let sessionId = uuid();
-      window.addEventListener("load", () => {
-        const lastCrash = localStorage.getItem("crash");
+      const sessionId = uuid();
+      window.addEventListener('load', () => {
+        const lastCrash = localStorage.getItem('crash');
         if (lastCrash) {
           this.report({
             type: 'error',
-            data: lastCrash
-          })
+            data: lastCrash,
+          });
         }
-        localStorage.setItem('crash', sessionId)
-      })
+        localStorage.setItem('crash', sessionId);
+      });
       // 在正常退出页面前销毁
-      window.addEventListener("beforeunload", function() {
-        localStorage.setItem('crash', '')
+      window.addEventListener('beforeunload', () => {
+        localStorage.setItem('crash', '');
       });
       /*   // 判断当前浏览器是否支持serviceWork
         if ('serviceWorker' in navigator) {

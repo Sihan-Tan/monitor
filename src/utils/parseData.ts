@@ -1,6 +1,6 @@
-function parseData(target: any) :string{
+function parseData(target: any) :string {
   let cache: any = [];
-  const res:string = JSON.stringify(target, function (_key, value) {
+  const res:string = JSON.stringify(target, (_key, value) => {
     if (typeof value === 'object' && value !== null) {
       if (cache.indexOf(value) !== -1) {
         // Duplicate reference found
@@ -9,7 +9,7 @@ function parseData(target: any) :string{
           return JSON.parse(JSON.stringify(value));
         } catch (error) {
           // discard key if value cannot be deduped
-          return;
+          return null;
         }
       }
       // Store value in our collection

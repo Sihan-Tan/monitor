@@ -450,9 +450,7 @@ function () {
   Monitor.prototype.checkCrash = function () {
     var _this = this;
 
-    console.log('registerServiceWork');
     var sessionId = guid();
-    console.log(sessionId);
     window.addEventListener("load", function () {
       var lastCrash = localStorage.getItem("crash");
 
@@ -508,14 +506,18 @@ function () {
   return Monitor;
 }();
 
+var name = "kangaroo-monitor";
 var version = "0.0.1";
+
+var SDK_NAME = name;
+var SDK_VERSION = version;
 
 function init(options) {
   if (options === void 0) {
     options = {};
   }
 
-  console.log("%ckangaroo monitor version: " + version, 'color:#FFA138;font-size:16px;');
+  console.log("%c " + SDK_NAME + " version: " + SDK_VERSION, 'color:#FFA138;font-size:16px;');
   if (options.disabled) return;
 
   if (!options.logUrl) {
@@ -533,6 +535,8 @@ function init(options) {
   return instance;
 }
 
+exports.SDK_NAME = SDK_NAME;
+exports.SDK_VERSION = SDK_VERSION;
 exports.init = init;
 
 Object.defineProperty(exports, '__esModule', { value: true });

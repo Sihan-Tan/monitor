@@ -4,6 +4,7 @@ import replace from '@rollup/plugin-replace';
 import json from '@rollup/plugin-json';
 import typescript from 'rollup-plugin-typescript2';
 import { terser } from 'rollup-plugin-terser';
+import serve from 'rollup-plugin-serve';
 import pkg from './package.json';
 
 const extensions = [''];
@@ -26,7 +27,45 @@ const makeExternalPredicate = (externalArr) => {
   return (id) => pattern.test(id);
 };
 
-export default [
+export default {
+  input: 'src/index.ts',
+  output: [
+    {
+      file: 'dist/kangaroo-monitor.js',
+      format: 'umd',
+      name: 'KangarooMonitor',
+      indent: false,
+    },
+    {
+      file: 'examples/kangaroo-monitor.js',
+      format: 'umd',
+      name: 'KangarooMonitor',
+      indent: false,
+    }
+  ],
+  plugins: [
+    nodeResolve({
+      extensions,
+    }),
+    json(),
+    typescript({ tsconfigOverride: noDeclarationFiles }),
+    babel({
+      extensions,
+      exclude: 'node_modules/**',
+    }),
+    replace({
+      'process.env.NODE_ENV': JSON.stringify('development'),
+    }),
+    serve({ // 开启本地服务
+      open: true,
+      openPage: '/examples/index.html', // 打开的页面
+      port: 3010,
+      contentBase: ''
+    })
+  ],
+}
+
+/* export default [
   // commonjs
   {
     input: 'src/index.ts',
@@ -176,3 +215,4 @@ export default [
     ],
   },
 ];
+ */
